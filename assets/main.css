@@ -1,0 +1,103 @@
+body {
+    color: #333;
+    font: 15px "Arial";
+    margin: 35px;
+    width: auto;
+    
+}
+
+/*code {
+  background-color: #eee;
+  border: 1px solid #999;
+  display: block;
+  padding: 20px;
+}*/
+
+img {
+	width: 260px;
+	height: 260px;
+}
+
+.plot {
+	width: 350px;
+	height: 260px;
+}
+
+.small {
+	width: 220px;
+	height: 160px;
+}
+
+.row-free-img {
+	max-width: 100%;
+	height: auto;
+}
+
+.row-3-img {
+	width: 220px;
+	height: 220px;
+}
+
+.row-3-small-img {
+	width: 180px;
+	height: 180px;
+}
+
+/*.row-lincoln-img {
+	max-width: 75%;
+	height: auto;
+}*/
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #333;
+    background-image: linear-gradient(to right, #ccc, #333, #ccc);
+    margin: 40px 0;
+}
+
+li {
+	line-height: 28px;
+}
+
+
+.container {
+	width: 750px; 
+	margin: auto;
+	line-height: 35px;
+}
+
+.section {
+	line-height: 28px;
+}
+
+.img-big-container {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+
+}
+
+.img-container {
+	padding: 10px;
+}
+
+.img-container-small {
+	padding: 10px;
+	max-width: 230px;
+	height: auto;
+}
+
+.img-container-tiny {
+	/*padding: 10px;*/
+	max-width: 124px;
+	height: auto;
+}
+
+
+.img-text {
+	text-align: center;
+	line-height: 20px;
+	margin-top: 1px;
+	font-weight: bolder;
+}

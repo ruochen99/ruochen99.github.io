@@ -1,239 +1,746 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-		<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-		<link rel="stylesheet" type="text/css" href="assets/css/swiper.min.css">
-		<meta charset="utf-8">
-		<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
-		<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-	</head>
-	<body>
+<head>
+<title>CS 194 Project 2</title>
+<link rel="stylesheet" href="assets/main.css" media="Screen" type="text/css" />
 
-	<section id="home">
+</head>
+<body>
 
-		<div id="name-container">
-		<div id="name">
-		Chloe Liu
-  	</div>
-	  </div>
+<div class="container">
+<h1> Fun with Filters and Frequencies </h1>
+<h3> By Ruochen(Chloe) Liu</h3>
 
-		<div id="year">
-			Since 1999.9
-		</div>
+<div class="secton-container">
+<h2> Part 1: Fun with Filters </h2>
+<h3> Part 1.1: Finite Difference Operator </h3>
+<p class="section"> I first calculate the partial derivative in x and y of the cameraman image by convolving the image with finite difference operators <code> D_x = [[1, 1]]and D_y = [[1], [-1]] </code>, then I calculate the gradient magnitude, which is just <code> np.sqrt(x_gradient**2 + y_gradient**2)</code>. And after some experiments, I find out the best threshold value (0.1) to detect the edges in the graph.  </p>
+</div>
 
-		<div id="arrow">
-			<a href=#nav target="_blank">
-			<img id="arrow" src="assets/icons/down-arrow.png" width="50px" height="50px">
-			</a>
-		</div>
-	</section>
+<div class="img-big-container">
+	<div class='img-container'>
+		<img src="assets/img/part1/cameraman_dx.jpg">
+		<p class='img-text'> 
+		   Partial Derivative in x
+		</p>
+	</div>
+	<div class='img-container'>
+		<img src="assets/img/part1/cameraman_dy.jpg">
+		<p class='img-text'> 
+		   Partial Derivative in y
+		</p>
+	</div>
+	<div class='img-container'>
+		<img src="assets/img/part1/cameraman_grad_mag.jpg">
+		<p class='img-text'> 
+		   Gradient Magnitude
+		</p>
+	</div>
+	<div class='img-container'>
+		<img src="assets/img/part1/cameraman_bin.jpg">
+		<p class='img-text'> 
+		   Egdes
+		</p>
+	</div>
+</div>
 
-	<section id="nav">
-		<div id="nav-container">
-		<div id="left-top" class="icon-container">
-			<a class= "scroll" href=#about >
-          <img class="icon" src="assets/icons/woman.png" height="70px" height="70px"/>
-      </a>
-		</div>
+<div class="secton-container">
+<h3> Part 1.2: Derivative of Gaussian (DoG) Filter </h3>
+<p class="section"> In this part of the problem, I explore the use of gaussian filter. The <strong>first method</strong> I tried it to create a blurred version of the original image by convolving it with a gaussian filter and repeat the procedure in part 1.1; while in the <strong>second method</strong>, instead of applying the guassian filter and then taking the derivative of the image on x and y, I first convolve the 2D guassian with the finite difference operators <code> D_x </code> and <code> D_y </code>  and later convolve the image with this derivative of the gaussian. We can see that these two methods give us the same result. Also note that applying the gaussian filter helps us remove lots of noise and make the edge graph clearer. </p>
+</div>
 
-		<div id="right-top" class="icon-container">
-			<a class= "scroll" href=#projects >
-          <img class="icon" src="assets/icons/data.png" height="60px" height="60px"/>
-      </a>
-		</div>
+<div class="img-big-container">
+	<div class='img-container'>
+		<img src="assets/img/part1/cameraman_g_twostep.jpg">
+		<p class='img-text'> 
+		   Edges detected by the first method
+		</p>
+	</div>
+	<div class='img-container'>
+		<img src="assets/img/part1/gaussian_x.jpg">
+		<p class='img-text'> 
+		   Partial Derivative of the gaussian in x
+		</p>
+	</div>
+	<div class='img-container'>
+		<img src="assets/img/part1/gaussian_y.jpg">
+		<p class='img-text'> 
+		   Partial Derivative of the gaussian in y
+		</p>
+	</div>
+	<div class='img-container'>
+		<img src="assets/img/part1/cameraman_g_onestep.jpg">
+		<p class='img-text'> 
+		   Edges detected by the second method
+		</p>
+	</div>
+</div>
 
-		<div id="left-bottom" class="icon-container">
-			<a class= "scroll" href=#photos >
-          <img class="icon" src="assets/icons/photo-camera.png" height="70px" height="70px"/>
-      </a>
-		</div>
+<div class="secton-container">
+<h3> Part 1.3: Image Straightening </h3>
+<p class="section"> In this part of the problem, I try to straighten some images through the following steps: </p>
+<p class="section"> 
+	<ul>
+		<li> Crop a 2000*2000 square from the center of the original image;</li>
+		<li> Rotate the image by the proposed rotation angle; </li>
+		<li> Compute the gradient angle of the edges in the rotated image; </li>
+		<li> Compute a histogram of the frequencies of these angles; </li>
+		<li> Finally, pick the rotation with the maximum number of horizontal and vertical edges; </li>
+	</ul>
+</p>
+</div>
 
-		<div id="right-bottom" class="icon-container">
-			<a class= "scroll" href=#contact >
-          <img class="icon" src="assets/icons/contact.png" height="70px" height="70px"/>
-      </a>
-		</div>
-  </div>
-  </section>
+<div class="img-big-container">
+	<div class='img-container'>
+		<img src="assets/img/part1/facade.jpg">
+		<p class='img-text'> 
+		   Original 
+		</p>
+	</div>
+	<div class='img-container'>
+		<img src="assets/img/part1/facade_rotate.jpg">
+		<p class='img-text'> 
+		   Straightened (rotate -3)
+		</p>
+	</div>
+	<div class='img-container'>
+		<img class='plot' src="assets/img/part1/angel_dist_0.jpg">
+	</div>
+	<div class='img-container'>
+		<img class='plot' src="assets/img/part1/angel_dist_3.jpg">
+	</div>
+</div>
 
-	<section id="about">
+<hr>
 
-		<div id="hello">
-				Hello!
-		</div>
+<div class="img-big-container">
+	<div class='img-container'>
+		<img src="assets/img/part1/sunset.jpg">
+		<p class='img-text'> 
+		   Original 
+		</p>
+	</div>
+	<div class='img-container'>
+		<img src="assets/img/part1/sunset_rotate.jpg">
+		<p class='img-text'> 
+		   Straightened (rotate -10)
+		</p>
+	</div>
+	<div class='img-container'>
+		<img class='plot' src="assets/img/part1/sunset_angel_dist_0.jpg">
+	</div>
+	<div class='img-container'>
+		<img class='plot' src="assets/img/part1/sunset_angel_dist_10.jpg">
+	</div>
+</div>
 
-		<div id="introduction">
-			I'm Chloe,
-			a sophomore studying Computer Science and Statistics at UC Berkeley.
-		  I enjoy developing web applications,
-			builiding products from scratch, and experimenting with machine learning projects.
-			I'm particularly interested in how technology can benefit people and hope to use my knowledge
-			to make a positive impact on the world.
-			When I'm not studying, I like traveling, taking photos, drinking coffee and playing the piano.
+<hr>
 
-		</div>
+<div class="img-big-container">
+	<div class='img-container'>
+		<img src="assets/img/part1/pintu.jpg">
+		<p class='img-text'> 
+		   Original 
+		</p>
+	</div>
+	<div class='img-container'>
+		<img src="assets/img/part1/pintu_rotate.jpg">
+		<p class='img-text'> 
+		   Straightened (rotate -8)
+		</p>
+	</div>
+	<div class='img-container'>
+		<img class='plot' src="assets/img/part1/pintu_angel_dist_0.jpg">
+	</div>
+	<div class='img-container'>
+		<img class='plot' src="assets/img/part1/pintu_angel_dist_8.jpg">
+	</div>
+</div>
 
-			<img id="myphoto" src="assets/img/me.jpeg" height="300px" width="310px">
-	</section>
+<hr>
 
-	<section id="projects">
-		<h1 id="project-title">Projects</h1>
+<div class="img-big-container">
+	<div class='img-container'>
+		<img src="assets/img/part1/clock.jpg">
+		<p class='img-text'> 
+		   Original 
+		</p>
+	</div>
+	<div class='img-container'>
+		<img src="assets/img/part1/clock_rotate.jpg">
+		<p class='img-text'> 
+		   Straightened (not very successful)
+		</p>
+	</div>
+	<div class='img-container'>
+		<img class='plot' src="assets/img/part1/clock_angel_dist_0.jpg">
+	</div>
+	<div class='img-container'>
+		<img class='plot' src="assets/img/part1/clock_angel_dist_10.jpg">
+	</div>
+</div>
 
-		<div id="project-container">
+<div class="secton-container">
+<h2> Part 2: Fun with Frequencies! </h2>
+<h3> Part 2.1: Image "Sharpening" </h3>
+<p class="section"> In this part of the problem, I try to sharpen some images using the unsharp masking technique.</p>
+<p class="section"> 
+	<ul>
+		<li> Use the Gaussian low pass filter to only retain the low fequencies of an image; </li>
+		<li> Subtract the blurred version image from the original image to get the high frequencies of the image; </li>
+		<li> Compute the gradient angle of the edges in the rotated image; </li>
+		<li> Add the extracted high frequencies to the original image; </li>
+	</ul>
+</p>
+<p> We can combine these into one operation: <code> sharpened = original + alpha * (original - blurred)</code> </p>
+</div>
 
-			<div class="project-card">
-				<h1 class="title"> Amazons </h1>
-				<p class="content" > A 2-player board game and an AI player that can find
-														a win within 10 steps. </p>
-			</div>
-			<div class="project-card">
-				<h1 class="title"> Design Connect </h1>
-				<p class="content" > A mobile app model that aims to connect the design resources
-														 on campus. </p>
-			</div>
-			<div class="project-card">
-				<h1 class="title"> Slidify </h1>
-				<p class="content" > Web app that can filter through Spotify tracks based on various attributes.</p>
-			</div>
-			<div class="project-card">
-				<h1 class="title"> Berkeley China Summit </h1>
-				<p class="content" > The official site of Berkeley China Summit. </p>
-			</div>
-			<div class="project-card">
-				<h1 class="title"> Pacman </h1>
-				<p class="content" > AI Agent that can efficiently make
-														decisions in partially observable settings.</p>
-			</div>
+<div class="img-big-container">
+	<div class='img-container'>
+		<img src="assets/img/part2/taj.jpg">
+		<p class='img-text'> 
+		   Original 
+		</p>
+	</div>
+	<div class='img-container'>
+		<img src="assets/img/part2/sharp_taj.jpg">
+		<p class='img-text'> 
+		   Sharpened (sigma=0.9)
+		</p>
+	</div>
+	<div class='img-container'>
+		<img src="assets/img/part2/dog.png">
+		<p class='img-text'> 
+		   Original 
+		</p>
+	</div>
+	<div class='img-container'>
+		<img src="assets/img/part2/sharp_dog.jpg">
+		<p class='img-text'> 
+		   Sharpened (sigma=0.9)
+		</p>
+	</div>
+</div>
 
-			<div class="project-card">
-				<h1 class="title"> Humanitarian Data Exchange </h1>
-				<p class="content" > Machine learning tagging model.</p>
-			</div>
-		</div>
-	</section>
 
-	<section id="photos">
-	<!-- <h1 id="photo-title">Gallery</h1> -->
+<p> For the evaluation purpose, I also tried blurring a sharp image and than try to sharpen it, but it turns out that our "sharpened" image cannot be as good as the original one. </p>
 
-  <div class="swiper-container">
-    <div class="swiper-wrapper">
-      <div class="swiper-slide">
-					<div id="sf-detail">
-						San Francisco </br>
-						2018.7
-					</div>
-					<img id="sf" src="assets/img/sf.jpeg" width="627px" height="418px">
-			</div>
-			<div  class="swiper-slide">
-				<div id="zephyr-detail">
-					California Zephyr </br>
-					2019.3
-				</div>
-				<div class="img-slider">
-					<img id="zephyr" src="assets/img/zephre.jpeg" width="722px" height="361px">
-				</div>
-			</div>
-			<div class="swiper-slide">
-				<div id="sd-detail">
-					San Diego </br>
-					2018.8
-				</div>
-				<div class="img-slider">
-					<img id="sd" src="assets/img/sd.jpeg" width="640px" height="427px">
-				</div>
-			</div>
-			<div id="chicago" class="swiper-slide">
-				<div id="ch-detail">
-					Chicago </br>
-					2019.4
-				</div>
-				<div class="img-slider">
-				  <img id="ch" src="assets/img/chicago.jpeg" width="655px" height="437px">
-				</div>
-			</div>
-			<div class="swiper-slide">
-				<div id="seattle-detail">
-					Seattle </br>
-					2018.4
-				</div>
-				<div class="img-slider">
-					<img id="seattle" src="assets/img/seattle.jpeg" width="655px" height="437px">
-				</div>
-			</div>
-			<div class="swiper-slide">
-				<div id="uw-detail">
-					University of Washington </br>
-					2018.4
-				</div>
-				<div class="img-slider">
-					<img id="uw" src="assets/img/uw.jpeg" width="655px" height="430px">
-				</div>
-			</div>
-			<div class="swiper-slide">
-				<div id="gg-detail">
-					The Forbidden City </br>
-					2018.6
-				</div>
-				<div class="img-slider">
-					<img id="gg" src="assets/img/gg.jpeg" width="655px" height="430px">
-				</div>
-			</div>
-			</div>
-    </div>
-		    <!-- Add Arrows -->
-		    <div class="swiper-button-next"></div>
-		    <div class="swiper-button-prev"></div>
-		  </div>
+<div class="img-big-container">
+	<div class='img-container'>
+		<img class="small" src="assets/img/part2/rabbit.jpg">
+		<p class='img-text'> 
+		   Original 
+		</p>
+	</div>
+	<div class='img-container'>
+		<img class="small" src="assets/img/part2/blurred_rabbit.jpg">
+		<p class='img-text'> 
+		   Blurred 
+		</p>
+	</div>
+	<div class='img-container'>
+		<img class="small" src="assets/img/part2/sharpened_rabbit.jpg">
+		<p class='img-text'> 
+		   "Sharpened"
+		</p>
+	</div>
+</div>
 
+<div class="secton-container">
+<h3> Part 2.2: Hybrid Images </h3>
+<p class="section"> 
+In this problem, I try to create hybrid images - <i>hybrid images are static images that change in interpretation as a function of the viewing distance. The basic idea is that high frequency tends to dominate perception when it is available, but, at a distance, only the low frequency (smooth) part of the signal can be seen. </i></p>
+<p class="section"> 
+	<ul>
+		<li> Align the pair of images; </li>
+		<li> Low-pass filter image one, subtract the blurred image from the original to get the high frequnecy portion; </li>
+		<li> Low-pass filter image two; </li>
+		<li> Add these two processed images; that is to say, add the high frequnecy portion of image one and the low frequency portion of image two; </li>
+	</ul>
+</p>
+</div>
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<img class="row-free-img" src="assets/img/part2/nutmeg.jpg">
+		<p class='img-text'> 
+		   Image 1
+		</p>
+	</div>
+	<div class='img-container-small'>
+		<img class="row-free-img" src="assets/img/part2/DerekPicture.jpg">
+		<p class='img-text'> 
+		   Image 2
+		</p>
+	</div>
+	<div class='img-container-small'>
+		<img class="row-free-img" src="assets/img/part2/man_cat_hybrid.jpg">
+		<p class='img-text'> 
+		   Hybrid Image
+		</p>
+	</div>
+</div>
+
+<h3> Fourier analysis </h3>
+<div class="img-big-container">
+	<div class='img-container'>
+		<img src="assets/img/part2/cat_fourier.jpg">
+		<p class='img-text'> 
+		   Image 1
+		</p>
+	</div>
+	<div class='img-container'>
+		<img src="assets/img/part2/man_fourier.jpg">
+		<p class='img-text'> 
+		   Image 2
+		</p>
+	</div>
+	<div class='img-container'>
+		<img class='row-3-img' src="assets/img/part2/man_low_freq_fourier.jpg">
+		<p class='img-text'> 
+		   High-pass Filted Image1
+		</p>
+	</div>
+	<div class='img-container'>
+		<img class='row-3-img' src="assets/img/part2/cat_high_freq_fourier.jpg">
+		<p class='img-text'> 
+		   Low-pass Filted Image2
+		</p>
+	</div>
+	<div class='img-container'>
+		<img class='row-3-img' src="assets/img/part2/hybrid_fourier.jpg">
+		<p class='img-text'> 
+		   Hybrid Image 
+		</p>
+	</div>
+</div>
+
+<h3> Other images </h3>
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<img class="row-free-img" src="assets/img/part2/cat.jpg">
+		<p class='img-text'> 
+		   Image 1
+		</p>
+	</div>
+	<div class='img-container-small'>
+		<img class="row-free-img" src="assets/img/part2/tiger.jpg">
+		<p class='img-text'> 
+		   Image 2
+		</p>
+	</div>
+	<div class='img-container-small'>
+		<img class="row-free-img" src="assets/img/part2/tiger_cat_hybrid.jpg">
+		<p class='img-text'> 
+		   Hybrid Image
+		</p>
+	</div>
+</div>
+
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<img class="row-free-img" src="assets/img/part2/liuhaoran.jpeg">
+		<p class='img-text'> 
+		   Image 1
+		</p>
+	</div>
+	<div class='img-container-small'>
+		<img class="row-free-img" src="assets/img/part2/wulei.jpg">
+		<p class='img-text'> 
+		   Image 2
+		</p>
+	</div>
+	<div class='img-container-small'>
+		<img class="row-free-img" src="assets/img/part2/lrh_wl_hybrid.jpg">
+		<p class='img-text'> 
+		   Hybrid Image
+		</p>
+	</div>
+</div>
+
+<div class="secton-container">
+<h3> Part 2.3: Gaussian and Laplacian Stacks </h3>
+<p class="section"> 
+In this problem, I implement Gaussian and Laplacian stacks and apply them to different images. For the Gaussian stack, I repeatedly convolve the image with the gaussian; and for the Laplacian stack, I repeatedly subtract the subsequent image on the Gaussian stack from the previous one.</p>
+</div>
+
+
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<img class="row-free-img" src="assets/img/part2/lincoln.jpg">
+	</div>
+</div>
+
+<div class="img-big-container">
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/gstack0.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/gstack1.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/gstack2.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/gstack3.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/gstack4.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/gstack5.jpg">
+	</div>
+</div>
+
+<div class="img-big-container">
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/lstack0.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/lstack1.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/lstack2.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/lstack3.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/lstack4.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/lstack5.jpg">
+	</div>
+</div>
+
+<hr>
+
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<img class="row-free-img" src="assets/img/part2/monalisa.jpeg">
+	</div>
+</div>
+<div class="img-big-container">
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/monalisa_gstack0.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/monalisa_gstack1.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/monalisa_gstack2.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/monalisa_gstack3.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/monalisa_gstack4.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/monalisa_gstack5.jpg">
+	</div>
+</div>
+
+<div class="img-big-container">
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/monalisa_lstack0.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/monalisa_lstack1.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/monalisa_lstack2.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/monalisa_lstack3.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/monalisa_lstack4.jpg">
+	</div>
+	<div class='img-container-tiny'>
+		<img class="row-free-img" src="assets/img/part2/monalisa_lstack5.jpg">
+	</div>
+</div>
+
+<div class="secton-container">
+<h3> Part 2.4: Multiresolution Blending (a.k.a. the oraple!) </h3>
+<p class="section"> 
+The goal of this part of the assignment is to blend two images seamlessly using a multi resolution blending. <i> The goal of this part of the assignment is to blend two images seamlessly using a multi resolution blending.</i>  To achieve this, I first calculate the Gaussian stack and Laplacian stack of the two images, and then apply a mask to each level of the two images' Laplacian stack as described in the 1983 <a href="http://persci.mit.edu/pub_pdfs/spline83.pdf">paper</a> by Burt and Adelson. Finally, I reconstruct blending image and sum up the result on each level.
+</p>
+</div>
+
+<div class="img-big-container">
+	<div class='img-container'>
+		<img class='row-3-img' src="assets/img/part2/apple.jpeg">
+		<p class='img-text'> 
+		   Image 1
+		</p>
+	</div>
+	<div class='img-container'>
+		<img class='row-3-img' src="assets/img/part2/orange.jpeg">
+		<p class='img-text'> 
+		   Image2
+		</p>
+	</div>
+	<div class='img-container'>
+		<img class='row-3-img' src="assets/img/part2/mask1.png">
+		<p class='img-text'> 
+		   Mask
+		</p>
+	</div>
+</div>
+
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<p class='img-text'> 
+		   Right Image
+		</p>
+		<img class="row-3-small-img" src="assets/img/part2/left0.jpg">
+	</div>
+	
+	<div class='img-container-small'>
+		<p class='img-text'> 
+		   Left Image
+		</p>
+		<img class="row-3-small-img" src="assets/img/part2/right0.jpg">
+	</div>
+
+	<div class='img-container-small'>
+		<p class='img-text'> 
+		   Blended Image
+		</p>
+		<img class="row-3-small-img" src="assets/img/part2/blend0.jpg">
+	</div>
+</div>
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/left1.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/right1.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/blend1.jpg">
+	</div>
+</div>
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/left2.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/right2.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/blend2.jpg">
+	</div>
+</div>
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/left3.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/right3.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/blend3.jpg">
+	</div>
+</div>
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/left4.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/right4.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/blend4.jpg">
+	</div>
+</div>
+
+<hr>
+
+<div class="img-big-container">
+	<div class='img-container'>
+		<img class='row-3-img' src="assets/img/part2/gugong1.jpg">
+		<p class='img-text'> 
+		   Image 1
+		</p>
+	</div>
+	<div class='img-container'>
+		<img class='row-3-img' src="assets/img/part2/gugong2.jpg">
+		<p class='img-text'> 
+		   Image2
+		</p>
+	</div>
+	<div class='img-container'>
+		<img class='row-3-img' src="assets/img/part2/mask1.png">
+		<p class='img-text'> 
+		   Mask
+		</p>
+	</div>
+</div>
+
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<p class='img-text'> 
+		   Right Image
+		</p>
+		<img class="row-3-small-img" src="assets/img/part2/wb_left0.jpg">
+	</div>
+	
+	<div class='img-container-small'>
+		<p class='img-text'> 
+		   Left Image
+		</p>
+		<img class="row-3-small-img" src="assets/img/part2/wb_right0.jpg">
+	</div>
+
+	<div class='img-container-small'>
+		<p class='img-text'> 
+		   Blended Image
+		</p>
+		<img class="row-3-small-img" src="assets/img/part2/wb_blend0.jpg">
+	</div>
+</div>
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/wb_left1.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/wb_right1.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/wb_blend1.jpg">
+	</div>
+</div>
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/wb_left2.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/wb_right2.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/wb_blend2.jpg">
+	</div>
+</div>
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/wb_left3.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/wb_right3.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/wb_blend3.jpg">
+	</div>
+</div>
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/wb_left4.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/wb_right4.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/wb_blend4.jpg">
+	</div>
+</div>
+
+<hr>
+
+<p> This is an attempt with irregular mask. </p>
+
+<div class="img-big-container">
+	<div class='img-container'>
+		<img class='row-3-img' src="assets/img/part2/yosemite1.jpeg">
+		<p class='img-text'> 
+		   Image 1
+		</p>
+	</div>
+	<div class='img-container'>
+		<img class='row-3-img' src="assets/img/part2/yosemite2.jpg">
+		<p class='img-text'> 
+		   Image2
+		</p>
+	</div>
+	<div class='img-container'>
+		<img class='row-3-img' src="assets/img/part2/mask.png">
+		<p class='img-text'> 
+		   Mask
+		</p>
+	</div>
+</div>
+
+<div class="img-big-container">
+	<div class='img-container-small'>
+		
+		<img class="row-3-small-img" src="assets/img/part2/ir_left0.jpg">
+	</div>
+	
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/ir_right0.jpg">
+	</div>
+
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/ir_blend0.jpg">
+	</div>
+</div>
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/ir_left1.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/ir_right1.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/ir_blend1.jpg">
+	</div>
+</div>
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/ir_left2.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/ir_right2.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/ir_blend2.jpg">
+	</div>
+</div>
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/ir_left3.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/ir_right3.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/ir_blend3.jpg">
+	</div>
+</div>
+<div class="img-big-container">
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/ir_left4.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/ir_right4.jpg">
+	</div>
+	<div class='img-container-small'>
+		<img class="row-3-small-img" src="assets/img/part2/ir_blend4.jpg">
+	</div>
+</div>
+
+
+<div class="secton-container">
+<h3> Learning and thoughts </h3>
+<p class="section"> 
+I really like this project since it gives me some sense on how the filters and frequencies work for images. With these hand-on experience, I was able to understand those abstract theories and concepts much better.</p>
+</div>
 
 </div>
 
-	</section>
-
-	<section id="contact">
-		<div class="icon-container">
-			<a href="https://www.facebook.com/ruochen.liu.35" target="_blank">
-          <img class="icon-c" src="assets/icons/facebook.png" height="50px" height="50px"/>
-      </a>
-		</div>
-		<div class="icon-container">
-			<a href="https://www.linkedin.com/in/ruochen-liu-74932416a/" target="_blank">
-          <img class="icon-c" src="assets/icons/linkedin.png" height="50px" height="50px"/>
-      </a>
-		</div>
-		<div class="icon-container">
-			<a href="https://www.instagram.com/ruochenchloe/" target="_blank">
-          <img class="icon-c" src="assets/icons/instagram.png" height="50px" height="50px"/>
-      </a>
-		</div>
-		<div class="icon-container">
-			<a href="https://github.com/ruochen99" target="_blank">
-          <img class="icon-c" src="assets/icons/github.png" height="50px" height="50px"/>
-      </a>
-		</div>
-	</section>
-
-
-
-	<script type="text/javascript" src="assets/script/photos.js"> </script>
-	<script type="text/javascript" src="assets/script/swiper.min.js"> </script>
-	<script>
-    var swiper = new Swiper('.swiper-container', {
-      slidesPerView: 1,
-      spaceBetween: 30,
-      loop: true,
-      pagination: {
-        el: '.swiper-pagination',
-        clickable: true,
-      },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev',
-      },
-    });
-  </script>
-	</body>
-
-
+</body>
 </html>
+
+
+
